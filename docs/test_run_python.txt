@@ -1,0 +1,19 @@
+test_dataset_loading_integrity (test_recommender.TestInziraRecommender.test_dataset_loading_integrity)
+Verify that the Rwanda places catalogue loads successfully with expected shapes and columns. ... ok
+test_distance_score_tiers (test_recommender.TestInziraRecommender.test_distance_score_tiers)
+Verify the tiered distance scoring system maps correctly to distance limits. ... ok
+test_haversine_distance (test_recommender.TestInziraRecommender.test_haversine_distance)
+Verify mathematical correctness of the Haversine distance calculator. ... ok
+test_preference_score_budget_tiers (test_recommender.TestInziraRecommender.test_preference_score_budget_tiers)
+Verify that budget matching filters budget categories correctly. ... ok
+test_preference_score_interests_expansion (test_recommender.TestInziraRecommender.test_preference_score_interests_expansion)
+Verify that interest-to-tags expansion correctly matches places and assigns points. ... ok
+test_stage_1_main_recommendations (test_recommender.TestInziraRecommender.test_stage_1_main_recommendations)
+Test Stage 1 recommendations retrieval & ordering. ... ok
+test_stage_2_nearby_recommendations (test_recommender.TestInziraRecommender.test_stage_2_nearby_recommendations)
+Test Stage 2 nearby recommendation logic including distance sorting & diversity bonus. ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 1.532s
+
+OK

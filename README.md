@@ -19,28 +19,25 @@ Make sure you have [Node.js v18+](https://nodejs.org) (with `npm`) and [Python 3
 ### 1. Run the Frontend Next.js Web App
 Starts the high-fidelity Next.js Single Page Application (SPA):
 ```bash
-# 1. Navigate to the web folder
-cd web
-
-# 2. Install package dependencies
+# 1. Install package dependencies (in the root directory)
 npm install
 
-# 3. Run the local hot-reloading development server
+# 2. Run the local hot-reloading development server
 npm run dev
 ```
 Open **[http://localhost:3000](http://localhost:3000)** in your web browser to interact with the application.
 
-### 2. Run the Python Backend REST API
-Exposes the Python recommendation engine endpoints:
+### 2. Run the Python Backend & Analytics Dashboard
+Starts the interactive Streamlit dashboard:
 ```bash
-# 1. Navigate to the app folder
-cd app
+# 1. Navigate to the backend folder
+cd backend
 
 # 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Start the Flask API server
-python app.py
+# 3. Start the Streamlit server
+streamlit run app.py
 ```
 
 ### 3. Execute the ML Pipeline (Jupyter Notebook)
@@ -65,25 +62,25 @@ The project files are organized cleanly to separate data analysis, backend proce
 
 ```text
 Inzira/
-├── app/                  <-- Python REST API Backend
-│   ├── app.py            <-- API server exposing model prediction endpoints
-│   ├── data_loader.py    <-- Script to process clean coordinate catalogues
-│   ├── recommender.py    <-- Python similarity model using cosine distance
-│   └── requirements.txt  <-- Python backend dependency list
-├── web/                  <-- Next.js Frontend Application Folder
-│   ├── app/
-│   │   ├── api/
-│   │   │   └── feedback/
-│   │   │       └── route.js <-- Active feedback loop logger to user_feedback.csv
-│   │   ├── globals.css   <-- Core styling rules implementing minimalist theme
-│   │   ├── layout.js     <-- Global layout template
-│   │   ├── page.js       <-- Primary SPA page housing Discover, Map, and About tabs
-│   │   └── page.module.css <-- Component-scoped styling definitions
-│   ├── lib/
-│   │   └── recommender.js <-- Two-stage personalized & spatial scoring logic (JS version)
-│   ├── public/
-│   │   └── rwanda_places.json <-- Curated catalog of 1,236 verified coordinates
-│   └── package.json      <-- Frontend package configuration
+├── app/                  <-- Next.js Frontend App Router Directory
+│   ├── api/
+│   │   └── feedback/
+│   │       └── route.js  <-- Active feedback loop logger to user_feedback.csv
+│   ├── globals.css       <-- Core styling rules implementing minimalist theme
+│   ├── layout.js         <-- Global layout template
+│   ├── page.js           <-- Primary SPA page housing Discover, Map, and About tabs
+│   └── page.module.css   <-- Component-scoped styling definitions
+├── backend/              <-- Python Backend & Streamlit Analytics Dashboard
+│   ├── app.py            <-- Streamlit app interface exposing recommendation options
+│   ├── data_loader.py    <-- OOP helper to load and process clean coordinate catalogues
+│   ├── recommender.py    <-- OOP Python similarity model using matching algorithms
+│   ├── requirements.txt  <-- Python backend dependency list
+│   └── test_recommender.py <-- Python unittest suite for recommendation logic
+├── lib/                  <-- Next.js Shared Frontend Library
+│   ├── recommender.js    <-- Two-stage client-side personalized & spatial scoring logic
+│   └── test_recommender.js <-- Node-based regression test suite for JS scorer
+├── public/               <-- Next.js Public Assets Folder
+│   └── rwanda_places.json <-- Curated catalog of 1,236 verified coordinates
 ├── Data/                 <-- Source datasets
 │   ├── Rwanda_places_catalogue.csv  <-- Geographically mapped places
 │   ├── offerings.csv                <-- TripAdvisor offerings dataset
@@ -108,7 +105,7 @@ The application has been successfully deployed and verified on **Render.com** as
 1. **Deployment Platform**: Hosted on **Render** at [https://inzira-cdr7.onrender.com/](https://inzira-cdr7.onrender.com/).
 2. **Build Settings**:
    - **Environment**: Node.js
-   - **Root Directory**: `web`
+   - **Root Directory**: `.` (Root directory contains package.json)
    - **Build Command**: `npm run build`
    - **Start Command**: `npm start`
 3. **Execution & CI/CD**: Render is linked directly to the version control repository. Any commit pushed to the production branch triggers a new automated compilation process, running the build step to compile the Next.js production bundles and restarting the active server.
@@ -136,6 +133,27 @@ We tested the model using distinct input values representing diverse traveler pe
 - **Client-Side Execution Latency**: Because the two-stage similarity scorer runs client-side using JavaScript matrix operations on the 1,236 places array, it registers **sub-millisecond execution latency (< 2ms)** on modern hardware (laptops and desktop browsers) and under **5ms** on low-end mobile devices, resolving potential server lag.
 - **Static Assets Load Time**: The compressed JSON dataset (`rwanda_places.json`, 870KB) loads in less than **200ms** on standard mobile networks, avoiding database latency.
 - **Map Rendering**: Leaflet.js renders lightweight Voyager map layers smoothly across different mobile and desktop user agents without memory leaks or frame drops.
+
+### 4. Verification Evidence & Automated Logs
+We run automated regression testing suites before each deployment to verify mathematical scoring, budget tiers, interest mapping, and stage transitions.
+
+* **JavaScript Scorer Functional Test Run Log**: See the Node functional verification outputs in [test_run_js.txt](file:///c:/Users/Edisor/Documents/ALU%20CAPSTONE/Coding/inzira/docs/test_run_js.txt).
+* **Python Recommender Unittest Run Log**: See the Python unittest validation outputs in [test_run_python.txt](file:///c:/Users/Edisor/Documents/ALU%20CAPSTONE/Coding/inzira/docs/test_run_python.txt).
+
+### 5. Verification Screenshots (Persona & Device Testing)
+The following screenshots provide visual evidence of the system operating under different test personas and screen viewports:
+
+#### A. Live Landing Page Smoke Test
+![Live Landing Page](docs/screenshots/test_homepage_live.png)
+
+#### B. Persona Test: Budget Backpacker (Low Budget + Nature/Adventure Tags)
+![Budget Backpacker Persona Test](docs/screenshots/test_persona_budget_backpacker.png)
+
+#### C. Persona Test: Luxury Gourmet Explorer (High Budget + Food/Coffee Tags)
+![Luxury Gourmet Explorer Persona Test](docs/screenshots/test_persona_luxury_gourmet.png)
+
+#### D. Device Compatibility & Mobile Responsiveness (Map View)
+![Mobile Responsiveness Verification](docs/screenshots/test_mobile_responsiveness.png)
 
 ---
 

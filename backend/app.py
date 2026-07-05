@@ -14,19 +14,12 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 
-from data_loader import (
-    load_rwanda_data,
-    get_place_names,
-    get_provinces,
-    save_feedback,
-)
-from recommender import (
-    recommend_main_places,
-    recommend_nearby_places,
-    generate_reason,
-    get_category_emoji,
-    get_category_color,
-)
+from data_loader import RwandaDataLoader, get_place_names, get_provinces
+from recommender import InziraRecommender
+
+# Instantiate OOP controllers for data and recommendation logic
+data_loader = RwandaDataLoader()
+recommender = InziraRecommender()
 
 # ============================================================
 # PAGE CONFIG
@@ -446,7 +439,7 @@ iframe { border-radius: 14px !important; }
 
 @st.cache_data(show_spinner=False)
 def get_data():
-    return load_rwanda_data()
+    return data_loader.load_data()
 
 try:
     df = get_data()
@@ -599,7 +592,7 @@ with tab_home:
             }
             st.session_state.user_prefs = user_prefs
             with st.spinner("Finding your best matches across Rwanda..."):
-                results = recommend_main_places(user_prefs, df, top_n=top_n)
+                results = recommender.recommend_main_places(user_prefs, df, top_n=top_n)
             st.session_state.main_results = results
             st.session_state.nearby_results = None
             st.session_state.selected_place_row = None
@@ -628,8 +621,8 @@ with tab_home:
         # Build card HTML
         cards_html = '<div class="cards-grid">'
         for i, (_, row) in enumerate(results_df.iterrows()):
-            emoji = get_category_emoji(str(row.get("category", "")))
-            color = get_category_color(str(row.get("category", "")))
+            emoji = recommender.CATEGORY_EMOJI.get(str(row.get("category", "")), "📍")
+            color = recommender.CATEGORY_COLOR_CLASS.get(str(row.get("category", "")), "teal")
             cat = str(row.get("category", "PLACE")).upper()[:20]
             name = str(row.get("place_name", "Unknown"))
             pop = str(row.get("popularity_norm", "medium")).capitalize()
@@ -680,7 +673,7 @@ with tab_home:
             st.session_state.selected_place_row = sel_row
             prefs = st.session_state.user_prefs
             with st.spinner(f"Finding places near {chosen}..."):
-                nearby = recommend_nearby_places(sel_row, prefs, df, top_n=top_n)
+                nearby = recommender.recommend_nearby_places(sel_row, prefs, df, top_n=top_n)
             st.session_state.nearby_results = nearby
             st.session_state.stage = "nearby"
             st.rerun()
@@ -714,15 +707,15 @@ with tab_home:
         else:
             nearby_html = '<div class="nearby-list">'
             for _, row in nearby_df.iterrows():
-                emoji = get_category_emoji(str(row.get("category", "")))
-                color = get_category_color(str(row.get("category", "")))
+                emoji = recommender.CATEGORY_EMOJI.get(str(row.get("category", "")), "📍")
+                color = recommender.CATEGORY_COLOR_CLASS.get(str(row.get("category", "")), "teal")
                 name = str(row.get("place_name", "Unknown"))
                 district = str(row.get("district", ""))
                 cat = str(row.get("category", ""))
                 sub = f"{cat} · {district}" if cat and district else cat or district
                 dist_km = float(row.get("distance_km", 0))
                 match = int(row.get("match_pct", 0))
-                reason = generate_reason(
+                reason = recommender.generate_reason(
                     st.session_state.user_prefs,
                     row,
                     dist_km,
@@ -772,7 +765,7 @@ with tab_home:
                 top_place = ""
                 if st.session_state.main_results is not None and len(st.session_state.main_results) > 0:
                     top_place = str(st.session_state.main_results.iloc[0]["place_name"])
-                save_feedback(useful, fb_rating, fb_comment, top_place)
+                data_loader.save_feedback(useful, fb_rating, fb_comment, top_place)
                 st.success("✅ Thank you for your feedback!")
         st.markdown('</div>', unsafe_allow_html=True)
 
