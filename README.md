@@ -2,14 +2,14 @@
 
 ---
 
-## 🚀 Live Links & Video Walkthrough
+## Live Links & Video Walkthrough
 
 - **Live Deployed Application**: [https://inzira-cdr7.onrender.com/](https://inzira-cdr7.onrender.com/) *(Successfully deployed and verified on Render)*
 - **5-Minute Technical Demonstration Video**: [Watch Demo Video](https://www.bugufi.link/3tOvmS) *(Walkthrough demonstrating model notebook execution, interest tag matching, spatial nearby recommendations, and the feedback loop)*
 
 ---
 
-## 🛠️ Step-by-Step Installation & Run Guide
+## Step-by-Step Installation & Run Guide
 
 Follow these instructions to configure, run, and test the project in a local environment.
 
@@ -19,15 +19,31 @@ Make sure you have [Node.js v18+](https://nodejs.org) (with `npm`) and [Python 3
 ### 1. Run the Frontend Next.js Web App
 Starts the high-fidelity Next.js Single Page Application (SPA):
 ```bash
-# Install package dependencies
+# 1. Navigate to the web folder
+cd web
+
+# 2. Install package dependencies
 npm install
 
-# Run the local hot-reloading development server
+# 3. Run the local hot-reloading development server
 npm run dev
 ```
 Open **[http://localhost:3000](http://localhost:3000)** in your web browser to interact with the application.
 
-### 2. Execute the ML Pipeline (Jupyter Notebook)
+### 2. Run the Python Backend REST API
+Exposes the Python recommendation engine endpoints:
+```bash
+# 1. Navigate to the app folder
+cd app
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Start the Flask API server
+python app.py
+```
+
+### 3. Execute the ML Pipeline (Jupyter Notebook)
 To generate the model file, run the exploratory data analysis pipeline, and programmatically compile the notebook:
 ```bash
 # 1. Install required Python packages
@@ -41,44 +57,33 @@ python run_notebook.py
 ```
 This executes all data engineering cells, maps ratings distributions, calculates the TF-IDF feature matrix, and updates [Inzira_Recommender_Model.ipynb](notebook/Inzira_Recommender_Model.ipynb).
 
-### 3. Run the Python Backend REST API (Optional)
-Exposes the Python recommendation engine endpoints:
-```bash
-# 1. Navigate to the backend folder
-cd backend
-
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Start the Flask api server
-python app.py
-```
-
 ---
 
-## 📂 Project Structure & Key Files
+## Project Structure & Key Files
 
 The project files are organized cleanly to separate data analysis, backend processing, and frontend UI components:
 
 ```text
-inzira/
-├── app/                  <-- Next.js Frontend Application Folder
-│   ├── api/
-│   │   └── feedback/
-│   │       └── route.js  <-- [NEW] Active feedback loop logger to user_feedback.csv
-│   ├── globals.css       <-- Core styling rules implementing minimalist theme
-│   ├── layout.js         <-- Global layout template
-│   ├── page.js           <-- Primary SPA page housing Discover, Map, and About tabs
-│   └── page.module.css   <-- Component-scoped styling definitions
-├── backend/              <-- Python REST API Backend
+Inzira/
+├── app/                  <-- Python REST API Backend
 │   ├── app.py            <-- API server exposing model prediction endpoints
 │   ├── data_loader.py    <-- Script to process clean coordinate catalogues
 │   ├── recommender.py    <-- Python similarity model using cosine distance
 │   └── requirements.txt  <-- Python backend dependency list
-├── lib/                  <-- Core recommendation algorithms (JS version)
-│   └── recommender.js    <-- Two-stage personalized & spatial scoring logic
-├── public/               <-- Frontend static assets
-│   └── rwanda_places.json <-- Curated catalog of 1,236 verified coordinates across Rwanda
+├── web/                  <-- Next.js Frontend Application Folder
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── feedback/
+│   │   │       └── route.js <-- Active feedback loop logger to user_feedback.csv
+│   │   ├── globals.css   <-- Core styling rules implementing minimalist theme
+│   │   ├── layout.js     <-- Global layout template
+│   │   ├── page.js       <-- Primary SPA page housing Discover, Map, and About tabs
+│   │   └── page.module.css <-- Component-scoped styling definitions
+│   ├── lib/
+│   │   └── recommender.js <-- Two-stage personalized & spatial scoring logic (JS version)
+│   ├── public/
+│   │   └── rwanda_places.json <-- Curated catalog of 1,236 verified coordinates
+│   └── package.json      <-- Frontend package configuration
 ├── Data/                 <-- Source datasets
 │   ├── Rwanda_places_catalogue.csv  <-- Geographically mapped places
 │   ├── offerings.csv                <-- TripAdvisor offerings dataset
@@ -91,19 +96,19 @@ inzira/
 ├── make_notebook.py      <-- Script to build raw Jupyter notebook
 ├── run_notebook.py       <-- Script to run notebook cells programmatically
 ├── update_catalogue.py   <-- Helper script to sync data catalog
-├── package.json          <-- Frontend package configuration
 └── README.md             <-- Well-formatted student guide & technical overview
 ```
 
 ---
 
-## 🚀 Deployment Plan & Execution
+## Deployment Plan & Execution
 
 The application has been successfully deployed and verified on **Render.com** as a production Next.js Web Service:
 
 1. **Deployment Platform**: Hosted on **Render** at [https://inzira-cdr7.onrender.com/](https://inzira-cdr7.onrender.com/).
 2. **Build Settings**:
    - **Environment**: Node.js
+   - **Root Directory**: `web`
    - **Build Command**: `npm run build`
    - **Start Command**: `npm start`
 3. **Execution & CI/CD**: Render is linked directly to the version control repository. Any commit pushed to the production branch triggers a new automated compilation process, running the build step to compile the Next.js production bundles and restarting the active server.
@@ -111,7 +116,7 @@ The application has been successfully deployed and verified on **Render.com** as
 
 ---
 
-## 🧪 Testing Results & Strategies
+## Testing Results & Strategies
 
 Inzira incorporates **multiple testing strategies** to verify algorithm correctness, boundary constraints, and visual performance under variable conditions.
 
@@ -134,7 +139,7 @@ We tested the model using distinct input values representing diverse traveler pe
 
 ---
 
-## 📸 UI Screenshots (Web MVP & EDA)
+## UI Screenshots (Web MVP & EDA)
 
 ### Exploratory Data Analysis (EDA)
 Exploratory analysis plots generated in Python, showing rating frequencies and hotel class counts:
@@ -158,7 +163,7 @@ Geographical display of recommendations on a Leaflet voyager map container:
 
 ---
 
-## 📈 Academic Analysis, Discussion & Recommendations
+## Academic Analysis, Discussion & Recommendations
 
 ### 1. Detailed Analysis of Results
 The primary objective of the capstone project was to construct an intelligent spatial recommendation platform that maps traveler preference profiles to Rwanda's local spots while resolving the "cold-start" problem.
