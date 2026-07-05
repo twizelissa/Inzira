@@ -1,0 +1,729 @@
+/* page.module.css — Inzira dark flat design */
+
+/* ─── Shell / Layout ─────────────────────────────────────────────── */
+.shell {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  background: var(--bg);
+}
+
+.main {
+  padding-bottom: calc(var(--nav-height) + 20px);
+}
+
+/* ─── Loading ────────────────────────────────────────────────────── */
+.loadingScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 16px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.loadingSpinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Header ────────────────────────────────────────────────────── */
+.header {
+  text-align: center;
+  padding: 32px 24px 16px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.headerTitle {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+.headerSub {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+/* ─── Survey Stats Strip ─────────────────────────────────────────── */
+.statsStrip {
+  margin: 14px 14px 0;
+  padding: 14px 16px;
+  background: var(--accent-subtle);
+  border: 0.5px solid var(--border-active);
+  border-radius: 14px;
+}
+
+.statRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.statRow:last-child { margin-bottom: 0; }
+
+.statNum {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.statTxt {
+  font-size: 11px;
+  color: #9a9a9a;
+  line-height: 1.4;
+}
+
+.statDivider {
+  height: 0.5px;
+  background: rgba(29, 158, 117, 0.2);
+  margin: 8px 0;
+}
+
+/* ─── Chip Row (active interests) ────────────────────────────────── */
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px 14px 0;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 0.5px solid var(--border);
+  background: #1e1e1e;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.chipActive {
+  background: var(--accent-subtle);
+  border-color: var(--border-active);
+  color: var(--accent-text);
+}
+
+/* ─── Preferences Section ────────────────────────────────────────── */
+.prefsSection {
+  margin: 14px 14px 0;
+  background: #181818;
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.prefToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 13px 16px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.12s ease;
+}
+
+.prefToggle:hover { background: rgba(255,255,255,0.03); }
+
+.prefToggleLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prefToggleArrow {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.prefsBody {
+  padding: 0 14px 14px;
+  border-top: 0.5px solid var(--border);
+}
+
+.prefLabel {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 12px 0 7px;
+}
+
+.prefRow {
+  margin-bottom: 4px;
+}
+
+.prefRow2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.prefGroup { width: 100%; }
+
+/* ─── Interest Grid ──────────────────────────────────────────────── */
+.interestGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.interestChip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 6px;
+  border-radius: 10px;
+  background: #1e1e1e;
+  border: 0.5px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.12s ease;
+  cursor: pointer;
+}
+
+.interestChip:hover {
+  border-color: var(--border-active);
+  background: rgba(29,158,117,0.06);
+}
+
+.interestActive {
+  background: var(--accent-subtle) !important;
+  border-color: var(--border-active) !important;
+  color: var(--accent-text) !important;
+}
+
+.interestEmoji { font-size: 18px; }
+.interestLabel { font-size: 10px; font-weight: 500; }
+
+/* ─── Segment Buttons ────────────────────────────────────────────── */
+.segmentRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.segBtn {
+  padding: 6px 11px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  background: #1e1e1e;
+  border: 0.5px solid var(--border);
+  color: var(--text-secondary);
+  transition: all 0.12s ease;
+  white-space: nowrap;
+}
+
+.segBtn:hover {
+  border-color: rgba(29,158,117,0.4);
+  color: var(--text-primary);
+}
+
+.segActive {
+  background: var(--accent-subtle) !important;
+  border-color: var(--border-active) !important;
+  color: var(--accent-text) !important;
+}
+
+/* ─── Select ─────────────────────────────────────────────────────── */
+.prefSelect {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #1e1e1e;
+  border: 0.5px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.prefSelect:focus { border-color: var(--border-active); }
+
+/* ─── Slider ─────────────────────────────────────────────────────── */
+.slider {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+  height: 4px;
+  margin-top: 4px;
+}
+
+/* ─── Get Recs Button ────────────────────────────────────────────── */
+.getRecsBtn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 14px;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.getRecsBtn:hover { background: var(--accent-hover); }
+.getRecsBtn:active { transform: scale(0.98); }
+.getRecsBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ─── Section Label ──────────────────────────────────────────────── */
+.sectionLabel {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 18px 14px 9px;
+}
+
+/* ─── Top Picks Card Grid ────────────────────────────────────────── */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 0 14px;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+  position: relative;
+  text-align: left;
+}
+
+.card:hover {
+  border-color: var(--border-active);
+  transform: translateY(-1px);
+}
+
+.cardSelected {
+  border-color: var(--border-active) !important;
+  box-shadow: 0 0 0 1px var(--border-active);
+}
+
+.cardIconArea {
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconTeal   { background: var(--teal-fill); }
+.iconAmber  { background: var(--amber-fill); }
+.iconPurple { background: var(--purple-fill); }
+
+.cardEmoji { font-size: 26px; }
+
+.cardBody { padding: 9px 8px 10px; }
+
+.cardCategory {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardName {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 28px;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardRating {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.cardMatch {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.bestBadge {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.cardHint {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 10px 14px 0;
+}
+
+/* ─── Nearby List ────────────────────────────────────────────────── */
+.nearbyList {
+  padding: 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.nearbyRow {
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: border-color 0.15s ease;
+}
+
+.nearbyRow:hover { border-color: var(--border-active); }
+
+.nearbyIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.nearbyMiddle {
+  flex: 1;
+  min-width: 0;
+}
+
+.nearbyName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nearbySub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reasonText {
+  font-size: 10px;
+  color: #4a4a4a;
+  margin-top: 3px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nearbyRight {
+  text-align: right;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.nearbyDist {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.nearbyMatch {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ─── Back Button ────────────────────────────────────────────────── */
+.backBtnWrap { padding: 10px 14px 0; }
+
+.backBtn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: transparent;
+  border: 0.5px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.12s ease;
+}
+
+.backBtn:hover {
+  border-color: var(--border-active);
+  color: var(--accent);
+}
+
+/* ─── Empty State ────────────────────────────────────────────────── */
+.emptyState {
+  text-align: center;
+  padding: 40px 24px;
+  color: var(--text-muted);
+}
+
+.emptyIcon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.emptyState p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.emptyState strong { color: var(--accent); }
+
+/* ─── Feedback ───────────────────────────────────────────────────── */
+.feedbackCard {
+  margin: 0 14px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+}
+
+.fbLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.fbRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.fbGroup { width: 100%; }
+
+.fbTextarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: #1e1e1e;
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 12px;
+  resize: vertical;
+  transition: border-color 0.12s ease;
+}
+
+.fbTextarea:focus { border-color: var(--border-active); }
+.fbTextarea::placeholder { color: var(--text-muted); }
+
+.fbSuccess {
+  font-size: 13px;
+  color: var(--accent);
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* ─── Map ────────────────────────────────────────────────────────── */
+.mapContainer {
+  margin: 0 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 0.5px solid var(--border);
+}
+
+.mapLegend {
+  padding: 10px 14px;
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ─── About ──────────────────────────────────────────────────────── */
+.aboutCard {
+  margin: 0 14px 10px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+}
+
+.aboutCardAccent {
+  margin: 0 14px 10px;
+  padding: 16px;
+  background: var(--accent-subtle);
+  border: 0.5px solid var(--border-active);
+  border-radius: 14px;
+}
+
+.aboutText {
+  font-size: 13px;
+  color: #999;
+  line-height: 1.7;
+}
+
+.aboutText strong { color: var(--text-primary); }
+
+.aboutStep {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.aboutStep:last-child { margin-bottom: 0; }
+
+.aboutStepNum {
+  background: var(--accent-subtle);
+  border: 0.5px solid var(--border-active);
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+.aboutStepTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.aboutFormula {
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.aboutInfo {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.aboutInfo:last-child { margin-bottom: 0; }
+
+.aboutCapstone {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.aboutCapstoneTitle {
+  font-size: 12px;
+  color: #888;
+  line-height: 1.6;
+}
+
+/* ─── Bottom Spacer ──────────────────────────────────────────────── */
+.bottomSpacer { height: var(--nav-height); }
+
+/* ─── Bottom Navigation ──────────────────────────────────────────── */
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  background: #141414;
+  border-top: 0.5px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: var(--nav-height);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  z-index: 100;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: color 0.12s ease;
+}
+
+.navItem:hover { color: var(--text-secondary); }
+
+.navActive {
+  color: var(--accent) !important;
+}
+
+.navLabel {
+  font-size: 10px;
+  font-weight: 500;
+}
