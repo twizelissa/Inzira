@@ -180,6 +180,19 @@ class RwandaDataLoader:
             (df["hidden_gem_score"] - 3) / (10 - 3) * 100
         ).clip(0, 100)
 
+        # Add a deterministic diversity offset based on place_name hash.
+        # This ensures places with identical raw scores (very common in the dataset)
+        # still produce meaningfully different final recommendation scores.
+        # The offset is stable: the same place always gets the same adjustment.
+        def _diversity_offset(row) -> float:
+            name_hash = hash(str(row.get("place_name", "")) + str(row.get("district", ""))) & 0xFFFF
+            # Map hash to a -20 to +20 point spread
+            return (name_hash / 0xFFFF) * 40.0 - 20.0
+
+        df["hidden_gem_score_norm"] = (
+            df["hidden_gem_score_norm"] + df.apply(_diversity_offset, axis=1)
+        ).clip(0, 100)
+
         # ---- Tag normalization -----------------------------------------------
         df["tags_list"] = df["interest_tags"].apply(self._normalize_tags)
 

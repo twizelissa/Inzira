@@ -47,3 +47,18 @@ __pycache__/
 *.pyd
 .pytest_cache/
 .ipynb_checkpoints/
+.venv/
+ml/models/*.pkl
+
+# Slide & Report Builders (Local Only)
+generate_slides.py
+/app/slides/
+build_official_template_report.py
+generate_diagrams.py
+generate_report_docx.py
+generate_report_pdf.py
+/scratch/
+docs/screenshots/
+docs/Elissa_Twizeyimana_Inzira_Capstone_Final_Report.md
+docs/diagrams/
+Data/user_profiles.json
