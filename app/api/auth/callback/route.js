@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
+export const dynamic = 'force-dynamic';
+
 const PROFILES_FILE = path.join(process.cwd(), 'Data', 'user_profiles.json');
 
 function loadProfiles() {
