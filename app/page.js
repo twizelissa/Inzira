@@ -334,6 +334,7 @@ export default function Home() {
   const [authError, setAuthError]   = useState('');
   const [authLoading, setAuthLoading] = useState(false);
   const [showSavedModal, setShowSavedModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [authMode, setAuthMode]             = useState('login'); // 'login' or 'signup'
   const [authIdentifier, setAuthIdentifier] = useState('');      // email or phone number
   const [authPass, setAuthPass]             = useState('');
@@ -2413,6 +2414,93 @@ export default function Home() {
           </div>
         )}
 
+        {/* ──────────────────────────────────────────────────
+           Privacy Policy and User Terms Modal
+           ────────────────────────────────────────────────── */}
+        {showPrivacyModal && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(17, 24, 39, 0.6)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '24px',
+          }} onClick={() => setShowPrivacyModal(false)}>
+            <div className="saved-modal-content" style={{
+              background: '#ffffff',
+              borderRadius: '16px',
+              width: '100%',
+              maxWidth: '640px',
+              maxHeight: '85vh',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)',
+            }} onClick={e => e.stopPropagation()}>
+              <div style={{ padding: '20px 24px', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>Privacy Policy & User Terms</h2>
+                  <p style={{ fontSize: '12px', color: '#6b7280' }}>Inzira Academic Prototype Document</p>
+                </div>
+                <button onClick={() => setShowPrivacyModal(false)} style={{ fontSize: '18px', color: '#9ca3af', cursor: 'pointer' }}>✕</button>
+              </div>
+
+              <div className="no-scrollbar" style={{ padding: '24px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', fontSize: '14px', lineHeight: '1.6', color: '#374151' }}>
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginBottom: '6px' }}>1. About Inzira</h3>
+                  <p>Inzira is an academic prototype developed for a capstone project. It helps users discover places in Rwanda based on interests, budget, time, location, and nearby options. Inzira is not an official tourism authority, booking platform, transport service, or emergency service.</p>
+                </div>
+
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginBottom: '6px' }}>2. Data We Collect</h3>
+                  <p>Inzira may use limited information such as user preferences, saved places, feedback ratings, optional comments, and basic account information if a user signs in. This information is used only to generate recommendations, improve the prototype, and support academic evaluation.</p>
+                </div>
+
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginBottom: '6px' }}>3. Data We Do Not Collect</h3>
+                  <p>Inzira does not require sensitive personal information such as national ID numbers, payment details, health information, exact home addresses, private documents, or private communications. Users should not submit sensitive personal information in feedback fields.</p>
+                </div>
+
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginBottom: '6px' }}>4. How Recommendations Work</h3>
+                  <p>Recommendations are generated using user preferences, place features, ratings, tags, and location-based scoring. Nearby recommendations are based on distance and relevance around a selected destination.</p>
+                </div>
+
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginBottom: '6px' }}>5. Recommendation Limitations</h3>
+                  <p>Inzira provides suggestions, not guarantees. Place information such as prices, opening hours, safety, accessibility, transport, and official requirements may change. Users should verify important travel details from official or trusted sources before visiting a place.</p>
+                </div>
+
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginBottom: '6px' }}>6. User Control</h3>
+                  <p>Users can choose their preferences, decide whether to save places, and choose whether to give feedback. Users may stop using the prototype at any time.</p>
+                </div>
+
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginBottom: '6px' }}>7. Responsible Use</h3>
+                  <p>Users should use Inzira respectfully and should not submit false, harmful, offensive, or sensitive information through feedback or comments.</p>
+                </div>
+
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginBottom: '6px' }}>8. Academic Use</h3>
+                  <p>Data collected through the prototype may be used in summary form for academic reporting and system improvement. The project aims to protect user privacy and avoid unnecessary data collection.</p>
+                </div>
+
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginBottom: '6px' }}>9. Contact</h3>
+                  <p>For questions about this project, users may contact the project developer through the official project or academic communication channel.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
 
       {/* ──────────────────────────────────────────────────
@@ -2504,9 +2592,9 @@ export default function Home() {
           }}>
             <div>© 2026 Inzira Rwanda. Built with ❤️ for Capstone. All rights reserved.</div>
             <div style={{ display: 'flex', gap: '16px' }}>
-              <span>Privacy Policy</span>
+              <span style={{ cursor: 'pointer' }} onClick={() => setShowPrivacyModal(true)}>Privacy Policy</span>
               <span>•</span>
-              <span>Terms of Service</span>
+              <span style={{ cursor: 'pointer' }} onClick={() => setShowPrivacyModal(true)}>Terms of Service</span>
               <span>•</span>
               <span>Firebase Identity</span>
             </div>
