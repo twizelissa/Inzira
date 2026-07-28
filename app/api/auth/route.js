@@ -9,6 +9,8 @@ import {
 } from '../../../lib/db';
 import { supabase, isSupabaseConfigured } from '../../../lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 let dbInitialized = false;
 
 // Ensure database tables exist and JSON data is migrated
