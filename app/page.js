@@ -725,6 +725,27 @@ export default function Home() {
       return;
     }
 
+    const originalUser = { ...user };
+    const saved = user.savedPlaces || [];
+    const existsIdx = saved.findIndex(p => p.place_name === place.place_name);
+    let newSaved = [...saved];
+
+    if (existsIdx >= 0) {
+      newSaved.splice(existsIdx, 1); // Optimistically remove from UI
+    } else {
+      newSaved.push({ ...place, savedAt: new Date().toISOString() }); // Optimistically add to UI
+    }
+
+    const optimisticUser = {
+      ...user,
+      savedPlaces: newSaved
+    };
+
+    // 1. Instantly update UI and localStorage (0ms latency)
+    setUser(optimisticUser);
+    localStorage.setItem('inzira_user', JSON.stringify(optimisticUser));
+
+    // 2. Perform DB write in the background
     try {
       const res = await fetch('/api/auth', {
         method: 'POST',
@@ -739,9 +760,16 @@ export default function Home() {
       if (data.user) {
         setUser(data.user);
         localStorage.setItem('inzira_user', JSON.stringify(data.user));
+      } else {
+        // Rollback if DB write fails
+        setUser(originalUser);
+        localStorage.setItem('inzira_user', JSON.stringify(originalUser));
       }
     } catch (err) {
       console.error('Bookmark error:', err);
+      // Rollback if network fails
+      setUser(originalUser);
+      localStorage.setItem('inzira_user', JSON.stringify(originalUser));
     }
   };
 
