@@ -1017,27 +1017,63 @@ export default function Home() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     
                     {/* Header info */}
-                    <div>
-                      <div style={{
-                        display: 'inline-flex',
-                        padding: '4px 10px',
-                        borderRadius: '4px',
-                        fontSize: '11px',
-                        fontWeight: 700,
-                        letterSpacing: '0.05em',
-                        textTransform: 'uppercase',
-                        background: categoryColors(selPlace.category).bg,
-                        color: categoryColors(selPlace.category).text,
-                        marginBottom: '12px'
-                      }}>
-                        {selPlace.category}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px' }}>
+                      <div>
+                        <div style={{
+                          display: 'inline-flex',
+                          padding: '4px 10px',
+                          borderRadius: '4px',
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          letterSpacing: '0.05em',
+                          textTransform: 'uppercase',
+                          background: categoryColors(selPlace.category).bg,
+                          color: categoryColors(selPlace.category).text,
+                          marginBottom: '12px'
+                        }}>
+                          {selPlace.category}
+                        </div>
+                        <h1 style={{ fontSize: '32px', fontWeight: 700, color: '#111827', letterSpacing: '-0.02em', marginBottom: '6px', lineHeight: 1.2 }}>
+                          {selPlace.place_name}
+                        </h1>
+                        <p style={{ fontSize: '15px', color: '#6b7280', fontWeight: 500 }}>
+                          {selPlace.district} · {selPlace.province_or_city}
+                        </p>
                       </div>
-                      <h1 style={{ fontSize: '32px', fontWeight: 700, color: '#111827', letterSpacing: '-0.02em', marginBottom: '6px', lineHeight: 1.2 }}>
-                        {selPlace.place_name}
-                      </h1>
-                      <p style={{ fontSize: '15px', color: '#6b7280', fontWeight: 500 }}>
-                        {selPlace.district} · {selPlace.province_or_city}
-                      </p>
+
+                      {/* Save/Bookmark Button */}
+                      <button 
+                        onClick={(e) => toggleBookmark(selPlace, e)}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '10px 18px',
+                          borderRadius: '12px',
+                          border: '1px solid ' + (isBookmarked(selPlace.place_name) ? '#10b981' : '#d1d5db'),
+                          background: isBookmarked(selPlace.place_name) ? '#ecfdf5' : '#ffffff',
+                          color: isBookmarked(selPlace.place_name) ? '#059669' : '#374151',
+                          fontSize: '14px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                          boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
+                        }}
+                      >
+                        <svg 
+                          width="16" 
+                          height="16" 
+                          viewBox="0 0 24 24" 
+                          fill={isBookmarked(selPlace.place_name) ? '#059669' : 'none'} 
+                          stroke={isBookmarked(selPlace.place_name) ? '#059669' : '#374151'} 
+                          strokeWidth="2.5" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        >
+                          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        {isBookmarked(selPlace.place_name) ? 'Saved' : 'Save Place'}
+                      </button>
                     </div>
 
                     {/* Recommender match summary */}
