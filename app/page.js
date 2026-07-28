@@ -2425,9 +2425,6 @@ export default function Home() {
               <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.6, marginBottom: '12px' }}>
                 Protected by Google Cloud Security & Firebase OAuth 2.0.
               </p>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '8px', background: '#1e293b', border: '1px solid #334155', fontSize: '12px', color: '#38bdf8' }}>
-                🛡️ Verified Google Auth
-              </div>
             </div>
           </div>
 
