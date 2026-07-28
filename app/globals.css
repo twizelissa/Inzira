@@ -70,10 +70,13 @@ html, body {
   }
   .header-tabs {
     order: 3;
-    width: 100%;
+    width: 100% !important;
     overflow-x: auto;
     justify-content: flex-start !important;
     padding-bottom: 4px;
+  }
+  .header-auth-bar {
+    order: 2;
   }
   .main-shell {
     padding: 24px 16px 80px !important;
@@ -88,5 +91,13 @@ html, body {
   .footer-grid {
     grid-template-columns: 1fr !important;
     gap: 32px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-modal-content, .profile-modal-content, .saved-modal-content {
+    padding: 20px 16px !important;
+    max-height: 95vh !important;
+    overflow-y: auto !important;
   }
 }

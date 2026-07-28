@@ -918,34 +918,33 @@ export default function Home() {
             <span style={{ fontSize: '18px', fontWeight: 700, letterSpacing: '-0.02em', color: '#111827' }}>Inzira</span>
           </div>
 
-          {/* Navigation Links & Auth Bar */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              {[
-                { id: 'nav-discover', k: 'discover', l: 'Discover', icon: 'discover' },
-                { id: 'nav-map', k: 'map', l: 'Map', icon: 'map' },
-                { id: 'nav-about', k: 'about', l: 'About', icon: 'about' },
-              ].map(({ id, k, l, icon }) => (
-                <button key={k} id={id} onClick={() => { setActiveNav(k); if (k !== 'discover') { setSelPlace(null); } }} style={{
-                  padding: '6px 14px',
-                  borderRadius: '9999px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  background: activeNav === k ? '#E1F5EE' : 'transparent',
-                  color: activeNav === k ? '#0F6E56' : '#4b5563',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  cursor: 'pointer',
-                }}>
-                  <SvgIcon name={icon} size={14} color={activeNav === k ? '#0F6E56' : '#4b5563'} />
-                  {l}
-                </button>
-              ))}
-            </div>
+          {/* Navigation Links (Tabs) */}
+          <div className="header-tabs" style={{ display: 'flex', gap: '8px' }}>
+            {[
+              { id: 'nav-discover', k: 'discover', l: 'Discover', icon: 'discover' },
+              { id: 'nav-map', k: 'map', l: 'Map', icon: 'map' },
+              { id: 'nav-about', k: 'about', l: 'About', icon: 'about' },
+            ].map(({ id, k, l, icon }) => (
+              <button key={k} id={id} onClick={() => { setActiveNav(k); if (k !== 'discover') { setSelPlace(null); } }} style={{
+                padding: '6px 14px',
+                borderRadius: '9999px',
+                fontSize: '13px',
+                fontWeight: 600,
+                background: activeNav === k ? '#E1F5EE' : 'transparent',
+                color: activeNav === k ? '#0F6E56' : '#4b5563',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer',
+              }}>
+                <SvgIcon name={icon} size={14} color={activeNav === k ? '#0F6E56' : '#4b5563'} />
+                {l}
+              </button>
+            ))}
+          </div>
 
-            <div style={{ width: '1px', height: '24px', background: '#e5e7eb', margin: '0 4px' }} />
-
+          {/* Auth/Saved Places Bar */}
+          <div className="header-auth-bar" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             {/* Saved Places Counter Button */}
             <button onClick={() => setShowSavedModal(true)} style={{
               display: 'flex',
@@ -1013,7 +1012,7 @@ export default function Home() {
       {/* ──────────────────────────────────────────────────
          Main Application Shell Layout
          ────────────────────────────────────────────────── */}
-      <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '40px 24px 120px', minHeight: 'calc(100vh - 420px)' }}>
+      <main className="main-shell" style={{ maxWidth: '1100px', margin: '0 auto', padding: '40px 24px 120px', minHeight: 'calc(100vh - 420px)' }}>
         
         {/* ═══ 1. DISCOVER TAB ══════════════════════════ */}
         {activeNav === 'discover' && (
@@ -1039,7 +1038,7 @@ export default function Home() {
                 </button>
 
                 {/* Detail Columns */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '32px', alignItems: 'start' }}>
+                <div className="place-detail-grid" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '32px', alignItems: 'start' }}>
                   
                   {/* Left Column: Place Details & Feedback */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -1422,7 +1421,7 @@ export default function Home() {
                 
                 {/* 1. Hero Section */}
                 <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                  <h1 style={{ fontSize: '42px', fontWeight: 500, letterSpacing: '-0.03em', color: '#111827', marginBottom: '10px' }}>
+                  <h1 className="hero-title" style={{ fontSize: '42px', fontWeight: 500, letterSpacing: '-0.03em', color: '#111827', marginBottom: '10px' }}>
                     Find your next spot
                   </h1>
                   <p style={{ fontSize: '16px', color: '#6b7280', fontWeight: 400, maxWidth: '560px', margin: '0 auto', lineHeight: 1.5 }}>
@@ -1977,7 +1976,7 @@ export default function Home() {
             zIndex: 1000,
             padding: '24px',
           }} onClick={() => setShowAuthModal(false)}>
-            <div style={{
+            <div className="auth-modal-content" style={{
               background: '#ffffff',
               borderRadius: '16px',
               width: '100%',
@@ -2190,7 +2189,7 @@ export default function Home() {
             zIndex: 1050,
             padding: '20px',
           }} onClick={() => setShowProfileModal(false)}>
-            <div style={{
+            <div className="profile-modal-content" style={{
               background: '#ffffff',
               borderRadius: '24px',
               width: '100%',
@@ -2361,7 +2360,7 @@ export default function Home() {
             zIndex: 1000,
             padding: '24px',
           }} onClick={() => setShowSavedModal(false)}>
-            <div style={{
+            <div className="saved-modal-content" style={{
               background: '#ffffff',
               borderRadius: '16px',
               width: '100%',
