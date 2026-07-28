@@ -208,18 +208,29 @@ class InziraRecommender:
                    + 0.15 * hidden_gem_score
                    + 0.15 * location_score
         """
+        hg_pref = user_prefs.get("hidden_gem_pref", "both").lower()
+        candidate_df = df
+        if hg_pref == "hidden gems":
+            candidate_df = df[df["popularity_norm"].str.lower() != "high"]
+
+        is_resident = user_prefs.get("user_type", "tourist").lower() == "resident"
+        w_pref = 0.50
+        w_rat = 0.05 if is_resident else 0.20
+        w_hg = 0.30 if is_resident else 0.15
+        w_loc = 0.15
+
         results = []
-        for _, row in df.iterrows():
+        for _, row in candidate_df.iterrows():
             pref_s  = self.calculate_preference_score(user_prefs, row)
             rat_s   = self.calculate_rating_score(row)
             hg_s    = self.calculate_hidden_gem_score(row)
             loc_s   = self.calculate_location_score(user_prefs, row)
 
             main_score = min(
-                0.50 * pref_s
-                + 0.20 * rat_s
-                + 0.15 * hg_s
-                + 0.15 * loc_s,
+                w_pref * pref_s
+                + w_rat * rat_s
+                + w_hg * hg_s
+                + w_loc * loc_s,
                 99.0
             )
             results.append({
@@ -252,10 +263,20 @@ class InziraRecommender:
         sel_name = str(selected_place["place_name"])
         sel_category = str(selected_place.get("category", ""))
 
+        hg_pref = user_prefs.get("hidden_gem_pref", "both").lower()
+
+        candidate_df = df[df["place_name"] != sel_name]
+        if hg_pref == "hidden gems":
+            candidate_df = candidate_df[candidate_df["popularity_norm"].str.lower() != "high"]
+
+        is_resident = user_prefs.get("user_type", "tourist").lower() == "resident"
+        w_dist = 0.40
+        w_pref = 0.30
+        w_rat = 0.05 if is_resident else 0.20
+        w_hg = 0.25 if is_resident else 0.10
+
         results = []
-        for _, row in df.iterrows():
-            if str(row["place_name"]) == sel_name:
-                continue
+        for _, row in candidate_df.iterrows():
 
             dist_km = self.haversine_distance(
                 sel_lat, sel_lon,
@@ -270,10 +291,10 @@ class InziraRecommender:
             diversity_bonus = 5.0 if str(row.get("category", "")) != sel_category else 0.0
 
             nearby_score = min(
-                0.40 * dist_s
-                + 0.30 * pref_s
-                + 0.20 * rat_s
-                + 0.10 * hg_s
+                w_dist * dist_s
+                + w_pref * pref_s
+                + w_rat * rat_s
+                + w_hg * hg_s
                 + diversity_bonus,
                 99.0
             )

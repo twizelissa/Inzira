@@ -62,3 +62,5 @@ docs/screenshots/
 docs/Elissa_Twizeyimana_Inzira_Capstone_Final_Report.md
 docs/diagrams/
 Data/user_profiles.json
+Data/inzira.db
+Data/user_profiles.json.backup

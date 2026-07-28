@@ -202,9 +202,9 @@ const TIMES    = [
 ];
 
 const HG_PREFS = [
+  { v: 'hidden gems', l: 'Hidden Gems (Omit Famous Spots)' },
   { v: 'both', l: 'All Spots' },
-  { v: 'popular places', l: 'Popular Favorites' },
-  { v: 'hidden gems', l: 'Hidden Gems' }
+  { v: 'popular places', l: 'Popular Favorites Only' }
 ];
 
 /* ──────────────────────────────────────────────────
@@ -303,7 +303,8 @@ export default function Home() {
   const [budget, setBudget]         = useState('any');
   const [time, setTime]             = useState('any');
   const [province, setProvince]     = useState('any');
-  const [hgPref, setHgPref]         = useState('both');
+  const [hgPref, setHgPref]         = useState('hidden gems');
+  const [userType, setUserType]     = useState('tourist'); // 'tourist' | 'resident'
   const [topN, setTopN]             = useState(6);
   const [searchInputValue, setSearchInputValue] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -375,7 +376,7 @@ export default function Home() {
     fetch('/api/recommend', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ interests: [], budget: 'any', available_time: 'any', preferred_province: 'any', hidden_gem_pref: 'both', top_n: 1 }),
+      body: JSON.stringify({ interests: [], budget: 'any', available_time: 'any', preferred_province: 'any', hidden_gem_pref: 'hidden gems', top_n: 1 }),
     })
       .then(r => r.json())
       .then(data => setMlStatus(data.model || 'connected'))
@@ -482,6 +483,7 @@ export default function Home() {
         available_time: time,
         preferred_province: province,
         hidden_gem_pref: hgPref,
+        user_type: userType,
       };
       
       let filteredPlaces = places;
@@ -545,6 +547,7 @@ export default function Home() {
             top_n: topN,
             search_query: searchQuery,
             saved_places: user?.savedPlaces || [],
+            user_type: userType,
           }),
         });
         const data = await res.json();
@@ -572,7 +575,7 @@ export default function Home() {
     }, 300); // Debounce 300ms
 
     return () => clearTimeout(timer);
-  }, [places, interests, budget, time, province, hgPref, topN, searchQuery, selPlace, user]);
+  }, [places, interests, budget, time, province, hgPref, topN, searchQuery, selPlace, user, userType]);
 
   // Click card to enter detailed view & load nearby spots (Stage 2) via ML API
   const handleCardClick = useCallback(async (place) => {
@@ -583,6 +586,7 @@ export default function Home() {
     setFbComment('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+    let success = false;
     try {
       const res = await fetch('/api/nearby', {
         method: 'POST',
@@ -594,28 +598,32 @@ export default function Home() {
           available_time: time,
           hidden_gem_pref: hgPref,
           top_n: topN,
+          user_type: userType,
         }),
       });
       const data = await res.json();
       if (data.results && data.results.length > 0) {
         setNearbyResults(data.results);
-      } else {
-        throw new Error('Empty nearby results');
+        success = true;
       }
     } catch (err) {
-      console.error('Nearby API error, running local fallback recommender:', err);
-      // Client-side fallback nearby recommender
+      console.error('Nearby API error:', err);
+    }
+
+    if (!success) {
+      console.warn('Running local fallback recommender');
       const userPrefs = {
         interests,
         budget,
         available_time: time,
         preferred_province: province,
         hidden_gem_pref: hgPref,
+        user_type: userType,
       };
       const localNearby = recommendNearbyPlaces(place, userPrefs, places, topN);
       setNearbyResults(localNearby);
     }
-  }, [interests, budget, time, province, hgPref, topN, places]);
+  }, [interests, budget, time, province, hgPref, topN, places, userType]);
 
   // Authentication handlers
   const handleAuthSubmit = async (e) => {
@@ -723,7 +731,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'toggle_saved_place',
-          email: user.email,
+          email: user.email || user.identifier,
           place,
         }),
       });
@@ -753,7 +761,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'save_preferences',
-          email: user.email,
+          email: user.email || user.identifier,
           preferences: currentPrefs,
         }),
       });
@@ -1447,6 +1455,26 @@ export default function Home() {
                   justifyContent: 'center',
                   marginBottom: '40px',
                 }}>
+                  {/* Visitor Type Dropdown */}
+                  <div style={{ position: 'relative' }}>
+                    <select value={userType} onChange={e => setUserType(e.target.value)} style={{
+                      padding: '8px 28px 8px 12px',
+                      borderRadius: '9999px',
+                      border: '0.5px solid #d1d5db',
+                      background: '#ffffff',
+                      color: '#374151',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      WebkitAppearance: 'none',
+                    }}>
+                      <option value="tourist">✈️ International Tourist</option>
+                      <option value="resident">🏡 Local Resident</option>
+                    </select>
+                    <div style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#6b7280' }}>
+                      <SvgIcon name="chevron" size={8} />
+                    </div>
+                  </div>
                   {/* Budget Dropdown */}
                   <div style={{ position: 'relative' }}>
                     <select value={budget} onChange={e => setBudget(e.target.value)} style={{

@@ -158,10 +158,11 @@ class RecommendRequest(BaseModel):
     budget: str = "any"
     available_time: str = "any"
     preferred_province: str = "any"
-    hidden_gem_pref: str = "both"
+    hidden_gem_pref: str = "hidden gems"
     top_n: int = 6
     search_query: str = ""
     saved_places: list = []
+    user_type: str = "tourist"
 
 
 class NearbyRequest(BaseModel):
@@ -169,8 +170,9 @@ class NearbyRequest(BaseModel):
     interests: list[str] = []
     budget: str = "any"
     available_time: str = "any"
-    hidden_gem_pref: str = "both"
+    hidden_gem_pref: str = "hidden gems"
     top_n: int = 6
+    user_type: str = "tourist"
 
 
 class SimilarRequest(BaseModel):
@@ -225,6 +227,10 @@ def recommend(req: RecommendRequest):
         prov_candidates = candidates[prov_mask]
         if len(prov_candidates) > 0:
             candidates = prov_candidates
+
+    # Filter out highly popular places if user wants hidden gems (to omit well-known spots)
+    if req.hidden_gem_pref == "hidden gems":
+        candidates = candidates[candidates["popularity_norm"] != "high"]
 
     if len(candidates) == 0:
         return {"results": [], "model": "rf_scorer", "n_candidates": 0}
@@ -296,6 +302,14 @@ def recommend(req: RecommendRequest):
             h = int(hashlib.md5(name_key.encode()).hexdigest(), 16) & 0xFFFF
             scores[i] += (h / 0xFFFF - 0.5) * 0.016  # max ±0.8% nudge within tied group
 
+    # Persona-based adjustments for Local Residents (boosting hidden gems, dampening famous spots)
+    if req.user_type == "resident":
+        for i, (_, place) in enumerate(candidates.iterrows()):
+            if float(place["hidden_gem_score_norm"]) >= 70:
+                scores[i] *= 1.2
+            if place["popularity_norm"] == "high":
+                scores[i] *= 0.7
+
     scores = np.clip(scores, 0.0, 0.99)
 
     # Filter out zero-relevance results when interests are specified
@@ -338,6 +352,8 @@ def nearby(req: NearbyRequest):
 
     # Score all other places
     other = df[df["place_name"] != req.place_name]
+    if req.hidden_gem_pref == "hidden gems":
+        other = other[other["popularity_norm"] != "high"]
 
     features = []
     distances = []
@@ -366,6 +382,15 @@ def nearby(req: NearbyRequest):
 
     # Combined nearby score
     nearby_scores = 0.40 * dist_scores + 0.30 * pref_scores + 0.20 * (pref_scores * 0.8) + 0.10 * diversity
+    
+    # Persona-based adjustments for Local Residents in nearby spots
+    if req.user_type == "resident":
+        for i, (_, place) in enumerate(other.iterrows()):
+            if place["popularity_norm"] == "high":
+                nearby_scores[i] *= 0.7
+            if float(place["hidden_gem_score_norm"]) >= 70:
+                nearby_scores[i] *= 1.2
+
     nearby_scores = np.clip(nearby_scores, 0, 0.99)
 
     top_indices = nearby_scores.argsort()[::-1][:req.top_n]
